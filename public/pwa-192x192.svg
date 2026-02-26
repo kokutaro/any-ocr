@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#0f172a" rx="112" />
+  <text x="50%" y="54%" font-family="Arial, sans-serif" font-weight="bold" font-size="200" fill="#ffffff" text-anchor="middle" dominant-baseline="middle" letter-spacing="-10">any</text>
+  <text x="50%" y="82%" font-family="Arial, sans-serif" font-weight="bold" font-size="100" fill="#3b82f6" text-anchor="middle" dominant-baseline="middle" letter-spacing="5">OCR</text>
+</svg>
