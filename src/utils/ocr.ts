@@ -13,8 +13,9 @@ export const performOcr = async (
     
     // Create a fresh worker for every job. This avoids getting stuck
     // due to previous failed jobs or HMR issues.
-    worker = await createWorker(lang, undefined, {
+    worker = await createWorker(lang, 1, {
       langPath: 'https://tessdata.projectnaptha.com/4.0.0_best',
+      corePath: 'https://unpkg.com/tesseract.js-core@7.0.0/tesseract-core.wasm.js',
       logger: m => {
         console.log('Tesseract:', m.status, m.progress);
         if (onProgress) {
