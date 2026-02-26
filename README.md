@@ -1,73 +1,75 @@
-# React + TypeScript + Vite
+# any OCR
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+ブラウザ内で完結する、プライバシー重視のローカルファーストな画面キャプチャ＆OCRツールです。外部サーバーにデータを送信することなく、画面の任意の領域やクリップボードにコピーした画像から直接テキストを抽出します。
 
-Currently, two official plugins are available:
+## 主な機能
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **ローカル処理**: [Tesseract.js](https://tesseract.projectnaptha.com/)を利用し、OCR処理はすべてブラウザ内で完結するため、機密情報を含む画面でも安全に読み取ることができます。
+- **画面キャプチャと切り抜き**: 共有する画面やウィンドウを選択し、マウスのドラッグ操作で読み取りたい特定の領域だけを正確に切り抜くことができます。
+- **画像のペースト対応**: `Ctrl+V` (または `Cmd+V`) を押すだけで、クリップボードにある画像を直接読み込ませることができます。
+- **高精度モデル**: Tesseractの高精度LSTMモデル（`4.0.0_best`）を採用。さらに日本語や韓国語の読み取り時には、英数字モデル（`jpn+eng`, `kor+eng`）を組み合わせて処理することで、単一言語モデルで発生しやすい誤認識（ハルシネーション等）を強力に防ぎます。
+- **元画像と結果の比較 (プレビュー)**: 左側にキャプチャまたはペーストした元画像、右側に抽出されたテキストが並んで表示されるため、読み取り結果の目視での確認・修正が簡単です。
+- **リサイズ可能なレイアウト**: 中央の区切り線をドラッグして、キャプチャエリアとテキストエリアの幅を好みに調整できます。
+- **PWA (Progressive Web App) 対応**: デスクトップやモバイルのホーム画面にインストール可能。最初のモデルダウンロード後は、完全オフライン環境でも動作します。
+- **グローバルショートカット**: テキスト入力中以外であれば、キーボードの `C` キーを押すだけですぐにキャプチャモードを開始できます。
 
-## React Compiler
+## 対応言語
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 日本語 (`jpn`)
+- 英語 (`eng`)
+- 韓国語 (`kor`)
 
-## Expanding the ESLint configuration
+_※ 日本語と韓国語の読み取り時は、URLや英単語の混在による誤認識を防ぐため、システム内で自動的に英語モデルが併用されます。_
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 使い方
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. **言語の選択**: ヘッダーのドロップダウンメニューから、読み取りたい言語を選択します。
+2. **画像の取得 (キャプチャ または ペースト)**:
+   - **キャプチャ**: 「Screen Capture」ボタンを押すか、`C` キーを押して、キャプチャしたい画面またはウィンドウを選択します。
+   - **ペースト**: アプリを開いた状態で `Ctrl+V` (または `Cmd+V`) を押して、画像を貼り付けます。
+3. **切り抜き**: 画面キャプチャを使用した場合は、キャンバス上に画面が表示されます。読み取りたいテキストの部分をマウスでドラッグして四角く囲みます。
+4. **OCRの実行**: 画像が確定すると自動で読み取りが開始されます。初めてその言語を使用する場合は、言語モデルのダウンロードが行われるため数秒かかります。
+5. **結果の取得**: 処理が完了すると右側のパネルにテキストが表示されます。必要に応じて手直しをし、「Copy」ボタンでクリップボードにコピーしてください。
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 開発・ビルド方法
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 必須環境
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- Node.js (v18+)
+- npm
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### インストール手順
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. リポジトリのクローン:
+
+   ```bash
+   git clone <repository-url>
+   cd any-ocr
+   ```
+
+2. 依存関係のインストール:
+
+   ```bash
+   npm install
+   ```
+
+3. 開発サーバーの起動:
+
+   ```bash
+   npm run dev
+   ```
+
+4. 本番用ビルド:
+
+   ```bash
+   npm run build
+   ```
+
+## 使用技術技術・スタック
+
+- **フレームワーク**: React + Vite
+- **スタイリング**: Tailwind CSS
+- **アイコン**: Lucide React
+- **OCRエンジン**: Tesseract.js (WebAssembly SIMD非対応の社内PC環境等を考慮し、互換性の高い標準フォールバックコア `tesseract-core.wasm.js` を利用)
+- **PWA対応**: `vite-plugin-pwa`, Workbox
+- **ホスティング**: Firebase Hosting (GitHub Actions連携)
