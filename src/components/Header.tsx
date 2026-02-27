@@ -1,4 +1,5 @@
 import React from "react";
+import { siGithub } from "simple-icons/icons";
 
 export const LANGUAGES = [
   { code: "jpn+eng", label: "日本語" },
@@ -29,6 +30,24 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       <div className="flex items-center gap-4">
+        <a
+          href="https://github.com/kokutaro/any-ocr"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-slate-400 hover:text-slate-600 transition-colors"
+          title="GitHub Repository"
+          aria-label="GitHub Repository"
+        >
+          <svg
+            role="img"
+            viewBox="0 0 24 24"
+            className="w-5 h-5 fill-current"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d={siGithub.path} />
+          </svg>
+        </a>
+
         <div className="flex items-center gap-2">
           {status === "capturing" && (
             <span className="flex h-3 w-3 relative">
@@ -42,7 +61,7 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
             </span>
           )}
-          <span className="text-sm font-medium text-slate-500 capitalize min-w-[80px] text-right">
+          <span className="text-sm font-medium text-slate-500 capitalize text-right">
             {status}
           </span>
         </div>
